@@ -1,5 +1,11 @@
 const Student = require('../models/Student');
 
+const createUTCDate = (dateString) => {
+    if (!dateString) return null;
+    return new Date(dateString + 'T00:00:00.000Z');
+};
+
+
 exports.registerStudent = async (req, res) => {
     const { name, rollNumber, messStartDate, messEndDate } = req.body;
     if (!name || !rollNumber || !messStartDate || !messEndDate) {
@@ -17,8 +23,8 @@ exports.registerStudent = async (req, res) => {
         const student = await Student.create({
             name,
             rollNumber,
-            messStartDate: start,
-            messEndDate: end,
+            messStartDate: createUTCDate(messStartDate),
+            messEndDate: createUTCDate(messEndDate),
         });
         res.status(201).json(student);
     } catch (error) {
@@ -92,8 +98,8 @@ exports.reactivateStudent = async (req, res) => {
         }
 
         student.status = 'Active';
-        student.messStartDate = new Date(messStartDate.split('T')[0] + 'T00:00:00.000Z');
-        student.messEndDate = new Date(messEndDate.split('T')[0] + 'T00:00:00.000Z');
+        student.messStartDate = createUTCDate(messStartDate);
+        student.messEndDate = createUTCDate(messEndDate);
         student.leaveStartDate = null;
         student.leaveEndDate = null;
 
@@ -121,7 +127,7 @@ exports.renewSubscription = async (req, res) => {
             student.messStartDate = new Date();
         }
 
-        student.messEndDate = new Date(newMessEndDate.split('T')[0] + 'T00:00:00.000Z');
+       student.messEndDate = createUTCDate(newMessEndDate);
 
         if (student.status === 'Terminated') {
             student.status = 'Active';
