@@ -25,7 +25,6 @@ exports.getDailySummary = async (req, res) => {
             }
         ]);
 
-        // Get total active students for context
         const totalActiveStudents = await Student.countDocuments({ status: 'Active' });
 
         const result = {

@@ -13,9 +13,21 @@ const studentDataRoutes = require('./routes/studentDataRoutes');
 const studentAuthRoutes = require('./routes/studentAuthRoutes');
 
 const app = express();
+const allowedOrigins = ['https://hostel-mess-client.vercel.app'];
 
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
+    credentials: true,
+};
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Database Connection
