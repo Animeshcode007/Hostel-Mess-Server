@@ -7,14 +7,17 @@ const createUTCDate = (dateString) => {
 
 
 exports.registerStudent = async (req, res) => {
-    const { name, rollNumber, messStartDate, messEndDate } = req.body;
+    const { name, rollNumber, email, password, messStartDate, messEndDate } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password are now required for student registration.' });
+    }
     if (!name || !rollNumber || !messStartDate || !messEndDate) {
         return res.status(400).json({ message: 'All fields including start and end dates are required.' });
     }
     try {
-        const studentExists = await Student.findOne({ rollNumber });
+        const studentExists = await Student.findOne({ $or: [{ rollNumber }, { email }] });
         if (studentExists) {
-            return res.status(400).json({ message: 'Student with this roll number already exists' });
+            return res.status(400).json({ message: 'Student with this roll number or email already exists' });
         }
 
         const start = new Date(messStartDate.split('T')[0] + 'T00:00:00.000Z');
@@ -23,6 +26,8 @@ exports.registerStudent = async (req, res) => {
         const student = await Student.create({
             name,
             rollNumber,
+            email,
+            password,
             messStartDate: createUTCDate(messStartDate),
             messEndDate: createUTCDate(messEndDate),
         });
@@ -127,7 +132,7 @@ exports.renewSubscription = async (req, res) => {
             student.messStartDate = new Date();
         }
 
-       student.messEndDate = createUTCDate(newMessEndDate);
+        student.messEndDate = createUTCDate(newMessEndDate);
 
         if (student.status === 'Terminated') {
             student.status = 'Active';

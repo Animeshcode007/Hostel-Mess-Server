@@ -9,6 +9,8 @@ const studentRoutes = require('./routes/studentRoutes');
 const attendanceRoutes = require('./routes/attendanceRoutes');
 const issueRoutes = require('./routes/issueRoutes');
 const reportRoutes = require('./routes/reportRoutes');
+const studentDataRoutes = require('./routes/studentDataRoutes');
+const studentAuthRoutes = require('./routes/studentAuthRoutes');
 
 const app = express();
 
@@ -26,7 +28,9 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/issues', issueRoutes);
-app.use('/api/reports', reportRoutes)
+app.use('/api/reports', reportRoutes);
+app.use('/api/student', studentDataRoutes);
+app.use('/api/auth/student', studentAuthRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
