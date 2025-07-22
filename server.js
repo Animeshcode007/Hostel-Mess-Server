@@ -13,7 +13,7 @@ const studentDataRoutes = require('./routes/studentDataRoutes');
 const studentAuthRoutes = require('./routes/studentAuthRoutes');
 
 const app = express();
-const allowedOrigins = ['https://hostel-mess-client-5pwnyy8fo-animeshcode007s-projects.vercel.app'];
+const allowedOrigins = ['https://hostel-mess-client-lgtz4s2rb-animeshcode007s-projects.vercel.app'];
 
 const corsOptions = {
     origin: (origin, callback) => {
